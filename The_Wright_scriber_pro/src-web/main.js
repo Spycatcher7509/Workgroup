@@ -10,6 +10,26 @@ export async function login(email, password) {
   }
 }
 
+export async function submitTicket(userEmail, message) {
+  try {
+    const ticketId = await invoke('cmd_submit_ticket', { userEmail, message });
+    return ticketId;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}
+
+export async function getTickets() {
+  try {
+    const tickets = await invoke('cmd_get_tickets');
+    return tickets;
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
+}
+
 export async function changePassword(email, oldPassword, newPassword) {
   try {
     await invoke('cmd_change_password', { email, oldPassword, newPassword });
