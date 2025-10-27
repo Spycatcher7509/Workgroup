@@ -8,9 +8,27 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div id="app">
-    <!-- Disclaimer Modal, login form and main application will be inserted via main.js -->
+  <h1>The Wright Scriber Pro</h1>
+  <div id="login-section">
+    <h2>Login</h2>
+    <input type="email" id="login-email" placeholder="Email">
+    <input type="password" id="login-password" placeholder="Password">
+    <button id="login-btn">Login</button>
   </div>
+
+  <div id="ticket-section" style="display:none;">
+    <h2>Submit Support Ticket</h2>
+    <input type="email" id="ticket-email" placeholder="Your Email">
+    <textarea id="ticket-message" placeholder="Describe your issue"></textarea>
+    <button id="submit-ticket-btn">Submit Ticket</button>
+  </div>
+
+  <div id="tickets-list-section" style="display:none;">
+    <h2>Your Tickets</h2>
+    <button id="refresh-tickets-btn">Refresh Tickets</button>
+    <ul id="tickets-list"></ul>
+  </div>
+
   <script src="main.js"></script>
 </body>
 </html>
