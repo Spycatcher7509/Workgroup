@@ -15,11 +15,13 @@ use tauri::Manager;
 fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
-            commands::login_user,
-            commands::change_password
+            commands::cmd_login,
+            commands::cmd_change_password,
+            commands::cmd_submit_ticket,
+            commands::cmd_get_tickets
         ])
         .setup(|app| {
-            // Initialization logic here
+            // Initialization logic
             Ok(())
         })
         .run(tauri::generate_context!())
