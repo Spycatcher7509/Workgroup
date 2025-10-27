@@ -6,11 +6,7 @@ use uuid::Uuid;
 use chrono::Local;
 
 #[tauri::command]
-pub async fn cmd_login(
-    email: String,
-    password: String,
-    db: State<'_, Database>,
-) -> Result<bool, String> {
+pub async fn cmd_login(email: String, password: String, db: State<'_, Database>) -> Result<bool, String> {
     match login_user(&db, &email, &password).await {
         Ok(result) => Ok(result),
         Err(e) => Err(e),
@@ -18,12 +14,7 @@ pub async fn cmd_login(
 }
 
 #[tauri::command]
-pub async fn cmd_change_password(
-    email: String,
-    old_password: String,
-    new_password: String,
-    db: State<'_, Database>,
-) -> Result<(), String> {
+pub async fn cmd_change_password(email: String, old_password: String, new_password: String, db: State<'_, Database>) -> Result<(), String> {
     match change_password(&db, &email, &old_password, &new_password).await {
         Ok(_) => Ok(()),
         Err(e) => Err(e),
@@ -31,15 +22,18 @@ pub async fn cmd_change_password(
 }
 
 #[tauri::command]
-pub async fn cmd_submit_ticket(
-    user_email: String,
-    message: String,
-    db: State<'_, Database>,
-) -> Result<String, String> {
-    let ticket_id = format!("T-{}", Uuid::new_v4());
+pub async fn cmd_submit_ticket(user_email: String, message: String, db: State<'_, Database>) -> Result<String, String> {
+    // compute sequential ticket id
+    let existing = match db.get_all_tickets() {
+        Ok(t) => t,
+        Err(_) => Vec::new(),
+    };
+    let next_num = existing.len() + 1;
+    let year = Local::now().format("%Y").to_string();
+    let ticket_id = format!("T-{}-{:04}", year, next_num);
     let created_at = Local::now().format("%d/%m/%Y %H:%M:%S").to_string();
     let subject = format!("Support Ticket {}", ticket_id);
-    // store in DB
+    // store ticket
     if let Err(e) = db.add_support_ticket(&ticket_id, &created_at, &user_email, &subject, &message, "Open") {
         return Err(format!("Database error: {}", e));
     }
