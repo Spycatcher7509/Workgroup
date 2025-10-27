@@ -1,0 +1,17 @@
+{
+  "package": {
+    "productName": "The_Wright_scriber_pro",
+    "version": "0.1.0"
+  },
+  "tauri": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "The_Wright_scriber_pro",
+        "width": 1024,
+        "height": 768,
+        "resizable": true
+      }
+    ]
+  }
+}
