@@ -1,0 +1,22 @@
+[package]
+name = "the_wright_scriber_pro"
+version = "0.1.0"
+edition = "2021"
+description = "Secure, high-performance desktop transcription application."
+authors = ["Spike Wright"]
+
+[dependencies]
+tauri = { version = "1.6", features = ["api-all"] }
+tokio = { version = "1.36", features = ["rt-multi-thread", "macros", "sync"] }
+rusqlite = "0.29"
+sha2 = "0.10"
+chrono = { version = "0.4", features = ["serde"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+reqwest = { version = "0.11", features = ["json"] }
+dotenv = "0.15"
+age = "0.9"
+whisper-rs = "0.8.0"
+rust-argon2 = "1.0"
+uuid = { version = "1", features = ["v4"] }
+rand = "0.8"
