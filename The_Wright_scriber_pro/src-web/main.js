@@ -32,12 +32,58 @@ export async function getTickets() {
 
 export async function changePassword(email, oldPassword, newPassword) {
   try {
-    await invoke('cmd_change_password', { email, oldPassword, newPassword });
-    return true;
+    const result = await invoke('cmd_change_password', { email, oldPassword, newPassword });
+    return result;
   } catch (e) {
     console.error(e);
     return false;
   }
 }
 
-// Additional frontend logic for showing modals, handling transcription, export, logs, tickets, etc., will go here.
+// UI handlers
+document.addEventListener('DOMContentLoaded', () => {
+  const loginBtn = document.getElementById('login-btn');
+  const ticketSection = document.getElementById('ticket-section');
+  const ticketsListSection = document.getElementById('tickets-list-section');
+
+  loginBtn.addEventListener('click', async () => {
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+    const success = await login(email, password);
+    if (success) {
+      document.getElementById('login-section').style.display = 'none';
+      ticketSection.style.display = 'block';
+      ticketsListSection.style.display = 'block';
+    } else {
+      alert('Login failed');
+    }
+  });
+
+  const submitBtn = document.getElementById('submit-ticket-btn');
+  submitBtn.addEventListener('click', async () => {
+    const userEmail = document.getElementById('ticket-email').value;
+    const message = document.getElementById('ticket-message').value;
+    const ticketId = await submitTicket(userEmail, message);
+    if (ticketId) {
+      alert(`Ticket submitted with ID ${ticketId}`);
+      document.getElementById('ticket-email').value = '';
+      document.getElementById('ticket-message').value = '';
+      await refreshTickets();
+    } else {
+      alert('Failed to submit ticket');
+    }
+  });
+
+  const refreshBtn = document.getElementById('refresh-tickets-btn');
+  async function refreshTickets() {
+    const tickets = await getTickets();
+    const list = document.getElementById('tickets-list');
+    list.innerHTML = '';
+    tickets.forEach(ticket => {
+      const li = document.createElement('li');
+      li.textContent = `${ticket.ticket_id}: ${ticket.subject} (${ticket.status})`;
+      list.appendChild(li);
+    });
+  }
+  refreshBtn.addEventListener('click', refreshTickets);
+});
